@@ -818,8 +818,6 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -886,7 +884,7 @@ var Special = function (_BaseSpecial) {
       EL.mText = (0, _dom.makeElement)('div', CSS.main + '-msg__text', {
         innerHTML: 'Англицизмы наводнили русский деловой язык. Угадайте, что хочет собеседник, и предложите подходящий ответ.'
       });
-      EL.mNextBtn = (0, _dom.makeElement)('button', [CSS.main + '-msg__btn', CSS.main + '-msg__btn--next'], {
+      EL.mNextBtn = (0, _dom.makeElement)('button', CSS.main + '-msg__btn', {
         textContent: 'Далее',
         data: {
           click: 'continue'
@@ -917,21 +915,15 @@ var Special = function (_BaseSpecial) {
       EL.q.appendChild(EL.qText);
 
       // form
-      EL.f = (0, _dom.makeElement)('div', CSS.main + '-msg');
-      EL.fAvatar = (0, _dom.makeElement)('div', CSS.main + '-msg__avatar', {
+      EL.f = (0, _dom.makeElement)('div', [CSS.main + '-msg', CSS.main + '-msg--form']);
+      EL.fAvatar = (0, _dom.makeElement)('div', [CSS.main + '-msg__avatar', CSS.main + '-msg__avatar--form'], {
         innerHTML: _svg2.default.user
       });
       EL.fTitle = (0, _dom.makeElement)('div', CSS.main + '-msg__title', {
         textContent: 'Выберите ответ:'
       });
       EL.fForm = (0, _dom.makeElement)('div', CSS.main + '-msg__form', {
-        innerHTML: '<div class="' + CSS.main + '-msg__option" data-id="0" data-click="selectOption">\u041F\u043E\u043D\u044F\u0442\u043D\u043E</div>'
-      });
-      EL.fBtn = (0, _dom.makeElement)('button', CSS.main + '-msg__btn', {
-        textContent: 'Отправить',
-        data: {
-          click: 'start'
-        }
+        innerHTML: '<div class="' + CSS.main + '-msg__option" data-click="start">\u041F\u043E\u043D\u044F\u0442\u043D\u043E</div>'
       });
 
       EL.f.appendChild(EL.fAvatar);
@@ -966,55 +958,17 @@ var Special = function (_BaseSpecial) {
       EL.messages.appendChild(EL.f);
     }
   }, {
-    key: 'selectOption',
-    value: function selectOption(el) {
-      var id = el.dataset.id;
-
-
-      if (this.selectedOption !== id) {
-        var oldSelected = [].concat(_toConsumableArray(EL.fForm.children))[this.selectedOption];
-
-        if (oldSelected) {
-          oldSelected.classList.remove('is-selected');
-        }
-
-        el.classList.add('is-selected');
-
-        this.selectedOption = id;
-
-        if (!EL.f.contains(EL.fBtn)) {
-          EL.f.appendChild(EL.fBtn);
-        }
-      }
-    }
-  }, {
-    key: 'makeOptions',
-    value: function makeOptions(options) {
-      (0, _dom.removeChildren)(EL.fForm);
-      EL.f.removeChild(EL.fBtn);
-
-      options.forEach(function (option, index) {
-        EL.fForm.appendChild((0, _dom.makeElement)('div', CSS.main + '-msg__option', {
-          textContent: option.text,
-          data: {
-            id: index,
-            click: 'selectOption'
-          }
-        }));
-      });
-    }
-  }, {
     key: 'start',
     value: function start() {
-      this.selectedOption = undefined;
-      this.makeNextQuestion();
+      Analytics.sendEvent('Start');
 
-      EL.fBtn.dataset.click = 'answer';
+      this.makeNextQuestion();
     }
   }, {
     key: 'continue',
     value: function _continue() {
-      this.selectedOption = undefined;
+      Analytics.sendEvent('Next');
+
       this.activeIndex += 1;
       this.makeNextQuestion();
     }
@@ -1032,13 +986,15 @@ var Special = function (_BaseSpecial) {
       EL.messages.appendChild(EL.q);
       EL.messages.appendChild(EL.f);
 
-      this.makeOptions(question.options);
+      Special.makeOptions(question.options);
     }
   }, {
     key: 'answer',
-    value: function answer() {
+    value: function answer(el) {
+      Analytics.sendEvent('Answer');
+
       var question = _data2.default.questions[this.activeIndex];
-      var selectedOption = question.options[this.selectedOption];
+      var selectedOption = question.options[el.dataset.id];
 
       (0, _dom.removeChildren)(EL.messages);
 
@@ -1071,6 +1027,8 @@ var Special = function (_BaseSpecial) {
   }, {
     key: 'result',
     value: function result() {
+      Analytics.sendEvent('Result');
+
       (0, _dom.removeChildren)(EL.body);
       EL.body.textContent = this.correctAnswers + ' \u0438\u0437 ' + _data2.default.questions.length + ' \u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u044B\u0445 \u043E\u0442\u0432\u0435\u0442\u043E\u0432';
     }
@@ -1087,6 +1045,23 @@ var Special = function (_BaseSpecial) {
       this.createElements();
 
       this.container.appendChild(EL.main);
+
+      Analytics.sendEvent('Init', 'Show');
+    }
+  }], [{
+    key: 'makeOptions',
+    value: function makeOptions(options) {
+      (0, _dom.removeChildren)(EL.fForm);
+
+      options.forEach(function (option, index) {
+        EL.fForm.appendChild((0, _dom.makeElement)('div', CSS.main + '-msg__option', {
+          textContent: option.text,
+          data: {
+            id: index,
+            click: 'answer'
+          }
+        }));
+      });
     }
   }]);
 

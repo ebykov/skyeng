@@ -1,8 +1,7 @@
 .skyeng {
   position: relative;
   z-index: 99;
-  width: 1030px;
-  max-width: 100%;
+  margin: 0 10px;
   font-family: Roboto, sans-serif;
   font-size: 16px;
   line-height: normal;
@@ -15,6 +14,13 @@
   -webkit-box-shadow: 0 0 20px rgba(0,0,0,0.2);
           box-shadow: 0 0 20px rgba(0,0,0,0.2);
   overflow: hidden;
+}
+@media (min-width: 680px) {
+  .skyeng {
+    width: 1030px;
+    max-width: calc(100% - 30px);
+    margin: 0 15px;
+  }
 }
 .skyeng__titlebar {
   display: -webkit-box;
@@ -55,32 +61,61 @@
 }
 .skyeng__body {
   position: relative;
-  min-height: 600px;
-  width: 870px;
-  max-width: 100%;
-  margin: 60px auto 0;
+  min-height: 450px;
+  margin: 20px auto 0;
+  padding: 0 15px 10px;
+}
+@media (min-width: 680px) {
+  .skyeng__body {
+    width: 900px;
+    max-width: 100%;
+    min-height: 600px;
+    margin-top: 60px;
+  }
 }
 .skyeng__pages {
   position: absolute;
-  top: 10px;
-  right: 0;
+  top: -15px;
+  right: 5px;
   color: #b8b8b8;
-  font-size: 20px;
   font-weight: 500;
+}
+@media (min-width: 375px) {
+  .skyeng__pages {
+    top: 0;
+    right: 10px;
+  }
+}
+@media (min-width: 680px) {
+  .skyeng__pages {
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+  }
 }
 .skyeng-msg {
   position: relative;
-  padding: 0 90px;
 }
-.skyeng-msg:not(:last-child) {
-  margin-bottom: 100px;
+.skyeng-msg:not(:first-child) {
+  margin-top: 40px;
+}
+.skyeng-msg--form:not(:first-child) {
+  margin-top: 100px;
+}
+@media (min-width: 680px) {
+  .skyeng-msg {
+    padding: 0 90px;
+  }
+  .skyeng-msg:not(:first-child) {
+    margin-top: 100px;
+  }
 }
 .skyeng-msg__avatar {
   position: absolute;
   top: 0;
   left: 0;
-  width: 62px;
-  height: 62px;
+  width: 50px;
+  height: 50px;
   border-radius: 100%;
   background-color: #e6e6e6;
 }
@@ -91,17 +126,36 @@
   left: 0;
   right: 0;
   margin: auto;
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   fill: #b8b8b8;
 }
 .skyeng-msg__avatar--logo {
   background-color: #3575f1;
 }
 .skyeng-msg__avatar--logo > svg {
-  width: 48px;
-  height: 14px;
+  width: 38px;
+  height: 11px;
   fill: #fff;
+}
+@media (max-width: 679px) {
+  .skyeng-msg__avatar--form {
+    top: -58px;
+  }
+}
+@media (min-width: 680px) {
+  .skyeng-msg__avatar {
+    width: 62px;
+    height: 62px;
+  }
+  .skyeng-msg__avatar > svg {
+    width: 30px;
+    height: 30px;
+  }
+  .skyeng-msg__avatar--logo > svg {
+    width: 48px;
+    height: 14px;
+  }
 }
 .skyeng-msg__from,
 .skyeng-msg__to {
@@ -112,19 +166,59 @@
 .skyeng-msg__to > span {
   margin-right: 8px;
 }
+@media (max-width: 374px) {
+  .skyeng-msg__from,
+  .skyeng-msg__to {
+    font-size: 14px;
+  }
+  .skyeng-msg__from > span,
+  .skyeng-msg__to > span {
+    margin-right: 4px;
+  }
+}
+@media (max-width: 679px) {
+  .skyeng-msg__from,
+  .skyeng-msg__to {
+    padding-left: 60px;
+  }
+}
 .skyeng-msg__from {
-  padding-top: 10px;
   margin-bottom: 6px;
 }
 .skyeng-msg__from > span {
   color: #000;
-  font-size: 20px;
+}
+@media (min-width: 375px) {
+  .skyeng-msg__from > span {
+    font-size: 20px;
+  }
+}
+@media (max-width: 374px) {
+  .skyeng-msg__from {
+    padding-top: 6px;
+  }
+}
+@media (min-width: 680px) {
+  .skyeng-msg__from {
+    padding-top: 10px;
+  }
 }
 .skyeng-msg__text {
-  margin-top: 28px;
-  font-size: 25px;
+  margin-top: 20px;
+  font-size: 18px;
   font-weight: 500;
   line-height: 1.3em;
+}
+@media (min-width: 375px) {
+  .skyeng-msg__text {
+    font-size: 20px;
+  }
+}
+@media (min-width: 680px) {
+  .skyeng-msg__text {
+    margin-top: 28px;
+    font-size: 25px;
+  }
 }
 .skyeng-msg__text.is-correct {
   color: #46e25f;
@@ -137,6 +231,12 @@
   top: -36px;
   color: #b8b8b8;
 }
+@media (max-width: 679px) {
+  .skyeng-msg__title {
+    top: -42px;
+    left: 60px;
+  }
+}
 .skyeng-msg__form {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -148,13 +248,18 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  min-height: 200px;
-  padding: 18px 16px;
+  min-height: 150px;
+  padding: 12px 10px;
   border: 1px solid #b8b8b8;
 }
+@media (min-width: 680px) {
+  .skyeng-msg__form {
+    min-height: 200px;
+    padding: 18px 16px;
+  }
+}
 .skyeng-msg__option {
-  padding: 10px 14px;
-  font-size: 20px;
+  padding: 6px 10px;
   font-weight: 500;
   border: 2px solid #b8b8b8;
   -webkit-user-select: none;
@@ -169,7 +274,7 @@
   opacity: 0.4;
 }
 @media (hover: none), (hover: on-demand) {
-  .skyeng-msg__option {
+  .skyeng-msg__option:hover {
     opacity: 1;
   }
 }
@@ -182,18 +287,23 @@
 .skyeng-msg__option:not(:last-child) {
   margin-bottom: 8px;
 }
+@media (min-width: 680px) {
+  .skyeng-msg__option {
+    padding: 10px 14px;
+    font-size: 20px;
+  }
+}
 .skyeng-msg__btn {
-  min-width: 160px;
-  height: 48px;
-  margin: 22px 0 0;
-  padding: 0;
-  color: #fff;
+  height: 35px;
+  margin-top: 40px;
+  padding: 0 20px;
+  color: #3575f1;
   font-family: inherit;
   font-size: inherit;
   font-weight: 500;
-  border: none;
+  border: 2px solid currentColor;
   outline: none;
-  background-color: #3575f1;
+  background-color: #fff;
   cursor: pointer;
   -webkit-transition: opacity 0.2s;
   transition: opacity 0.2s;
@@ -202,15 +312,16 @@
   opacity: 0.8;
 }
 @media (hover: none), (hover: on-demand) {
-  .skyeng-msg__btn {
+  .skyeng-msg__btn:hover {
     opacity: 1;
   }
 }
-.skyeng-msg__btn--next {
-  margin-top: 68px;
-  color: #3575f1;
-  border: 2px solid currentColor;
-  background-color: #fff;
+@media (min-width: 680px) {
+  .skyeng-msg__btn {
+    min-width: 160px;
+    height: 48px;
+    margin-top: 68px;
+  }
 }
 /*# sourceMappingURL=src/css/special.css.map */
 
